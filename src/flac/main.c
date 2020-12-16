@@ -154,6 +154,7 @@ static struct share__option long_options_[] = {
 #endif
 	{ "blocksize"                 , share__required_argument, 0, 'b' },
 	{ "exhaustive-model-search"   , share__no_argument, 0, 'e' },
+	{ "escape-coding"             , share__no_argument, 0, 'E' }, /* "deprecated" */
 	{ "max-lpc-order"             , share__required_argument, 0, 'l' },
 	{ "apodization"               , share__required_argument, 0, 'A' },
 	{ "mid-side"                  , share__no_argument, 0, 'm' },
@@ -194,6 +195,8 @@ static struct share__option long_options_[] = {
 	{ "no-ogg"                    , share__no_argument, 0, 0 },
 #endif
 	{ "no-exhaustive-model-search", share__no_argument, 0, 0 },
+	{ "no-escape-coding"          , share__no_argument, 0, 0 },
+
 	{ "no-mid-side"               , share__no_argument, 0, 0 },
 	{ "no-adaptive-mid-side"      , share__no_argument, 0, 0 },
 	{ "no-qlp-coeff-prec-search"  , share__no_argument, 0, 0 },
@@ -618,7 +621,7 @@ int parse_options(int argc, char *argv[])
 	int short_option;
 	int option_index = 1;
 	FLAC__bool had_error = false;
-	const char *short_opts = "0123456789aA:b:cdefFhHl:mMo:pP:q:r:sS:tT:vVw";
+	const char *short_opts = "0123456789aA:b:cdeEfFhHl:mMo:pP:q:r:sS:tT:vVw";
 
 	while ((short_option = share__getopt_long(argc, argv, short_opts, long_options_, &option_index)) != -1) {
 		switch (short_option) {
@@ -872,6 +875,9 @@ int parse_option(int short_option, const char *long_option, const char *option_a
 #endif
 		else if(0 == strcmp(long_option, "no-exhaustive-model-search")) {
 			add_compression_setting_bool(CST_DO_EXHAUSTIVE_MODEL_SEARCH, false);
+		}
+		else if(0 == strcmp(long_option, "no-escape-coding")) {
+			add_compression_setting_bool(CST_DO_ESCAPE_CODING, false);
 		}
 		else if(0 == strcmp(long_option, "no-mid-side")) {
 			add_compression_setting_bool(CST_DO_MID_SIDE, false);
@@ -1284,6 +1290,7 @@ void show_help(void)
 	printf("  -m, --mid-side                     Try mid-side coding for each frame\n");
 	printf("  -M, --adaptive-mid-side            Adaptive mid-side coding for all frames\n");
 	printf("  -e, --exhaustive-model-search      Do exhaustive model search (expensive!)\n");
+	printf("  -E, --escape-coding                Use escape (non-rice) coding (deprecated)\n");
 	printf("  -A, --apodization=\"function\"       Window audio data with given the function\n");
 	printf("  -l, --max-lpc-order=#              Max LPC order; 0 => only fixed predictors\n");
 	printf("  -p, --qlp-coeff-precision-search   Exhaustively search LP coeff quantization\n");
@@ -1310,6 +1317,7 @@ void show_help(void)
 	printf("      --no-preserve-modtime\n");
 	printf("      --no-keep-foreign-metadata\n");
 	printf("      --no-exhaustive-model-search\n");
+	printf("      --no-escape-coding\n");
 	printf("      --no-lax\n");
 	printf("      --no-mid-side\n");
 #if FLAC__HAS_OGG

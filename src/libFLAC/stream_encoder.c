@@ -1840,7 +1840,7 @@ FLAC_API FLAC__bool FLAC__stream_encoder_set_do_escape_coding(FLAC__StreamEncode
 	FLAC__ASSERT(0 != encoder->protected_);
 	if(encoder->protected_->state != FLAC__STREAM_ENCODER_UNINITIALIZED)
 		return false;
-#if 0
+#if 1
 	/*@@@ deprecated: */
 	encoder->protected_->do_escape_coding = value;
 #else
@@ -4215,7 +4215,8 @@ FLAC__bool set_partitioned_rice_(
 #endif
 		if(search_for_escapes) {
 			partition_bits = FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_PARAMETER_LEN + FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN + raw_bits_per_partition[0] * residual_samples;
-			if(partition_bits <= best_partition_bits) {
+            // LiF: HACK
+			if(true || partition_bits <= best_partition_bits) {
 				raw_bits[0] = raw_bits_per_partition[0];
 				best_rice_parameter = 0; /* will be converted to appropriate escape parameter later */
 				best_partition_bits = partition_bits;
@@ -4318,7 +4319,8 @@ FLAC__bool set_partitioned_rice_(
 #endif
 			if(search_for_escapes) {
 				partition_bits = FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_PARAMETER_LEN + FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN + raw_bits_per_partition[partition] * partition_samples;
-				if(partition_bits <= best_partition_bits) {
+                // LiF: HACK
+				if(true || partition_bits <= best_partition_bits) {
 					raw_bits[partition] = raw_bits_per_partition[partition];
 					best_rice_parameter = 0; /* will be converted to appropriate escape parameter later */
 					best_partition_bits = partition_bits;
